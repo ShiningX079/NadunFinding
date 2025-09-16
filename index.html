@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>find my pot</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="Conataner">
+      <header>
+        <h1>Pot Location</h1>
+        <p class="Subtitle">Find my pot</p>
+      </header>
+      <div class="Rooms">
+        <div class="room-visual">
+          <h2>Floor Plan</h2>
+          <div class="floor-plan" id="floor-plan"></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+            const floorPlan = document.getElementById('floor-plan');
+            
+            let rooms = [];
+            for (let i = 501; i <= 520; i++) {
+                rooms.push(i);
+            }
+            
+            let OwnerRoom = 505;
+
+            rooms.forEach(room => {
+                const roomBox = document.createElement('div');
+                roomBox.className = 'room-box';
+                roomBox.id = 'room-' + room;
+                
+                if (room === OwnerRoom) {
+                    roomBox.classList.add('selected');
+                }
+                
+                roomBox.textContent = room;
+                
+                if (room === OwnerRoom) {
+                    const itemDot = document.createElement('div');
+                    itemDot.className = 'Dot';
+                    roomBox.appendChild(itemDot);
+                }
+                
+                floorPlan.appendChild(roomBox);
+            });
+            
+            const roomBoxes = document.querySelectorAll('.room-box');
+            
+            roomBoxes.forEach(box => {
+                box.addEventListener('click', function() {
+                    const roomId = parseInt(this.id.split('-')[1]);
+                    updateSelectedRoom(roomId);
+                });
+            });
+            
+            function updateSelectedRoom(roomId) {
+                OwnerRoom = roomId;
+                
+                roomBoxes.forEach(box => {
+                    const roomNumber = parseInt(box.id.split('-')[1]);
+                    box.classList.remove('selected');
+                    
+                    const existingDot = box.querySelector('.Dot');
+                    if (existingDot) {
+                        existingDot.remove();
+                    }
+                    
+                    if (roomNumber === roomId) {
+                        box.classList.add('selected');
+                        const redDot = document.createElement('div');
+                        redDot.className = 'Dot';
+                        box.appendChild(redDot);
+                    }
+                });
+            }
+        });
+    </script>
+  </body>
+</html>
